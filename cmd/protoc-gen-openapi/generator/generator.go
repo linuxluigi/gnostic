@@ -501,7 +501,7 @@ func (g *OpenAPIv3Generator) buildOperationV3(
 	name, content := g.reflect.responseContentForMessage(outputMessage.Desc)
 	responses := &v3.Responses{}
 
-	// Add the default 200 reponse if needed
+	// Add the default 200 response if needed
 	if *g.conf.Default200Response {
 		default200Response := &v3.NamedResponseOrReference{
 			Name: name,
