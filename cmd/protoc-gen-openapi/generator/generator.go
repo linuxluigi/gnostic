@@ -35,14 +35,15 @@ import (
 )
 
 type Configuration struct {
-	Version         *string
-	Title           *string
-	Description     *string
-	Naming          *string
-	FQSchemaNaming  *bool
-	EnumType        *string
-	CircularDepth   *int
-	DefaultResponse *bool
+	Version            *string
+	Title              *string
+	Description        *string
+	Naming             *string
+	FQSchemaNaming     *bool
+	EnumType           *string
+	CircularDepth      *int
+	Default200Response *bool
+	DefaultResponse    *bool
 }
 
 const (
@@ -498,20 +499,23 @@ func (g *OpenAPIv3Generator) buildOperationV3(
 
 	// Create the response.
 	name, content := g.reflect.responseContentForMessage(outputMessage.Desc)
-	responses := &v3.Responses{
-		ResponseOrReference: []*v3.NamedResponseOrReference{
-			{
-				Name: name,
-				Value: &v3.ResponseOrReference{
-					Oneof: &v3.ResponseOrReference_Response{
-						Response: &v3.Response{
-							Description: "OK",
-							Content:     content,
-						},
+	responses := &v3.Responses{}
+
+	// Add the default 200 reponse if needed
+	if *g.conf.Default200Response {
+		default200Response := &v3.NamedResponseOrReference{
+			Name: name,
+			Value: &v3.ResponseOrReference{
+				Oneof: &v3.ResponseOrReference_Response{
+					Response: &v3.Response{
+						Description: "OK",
+						Content:     content,
 					},
 				},
 			},
-		},
+		}
+
+		responses.ResponseOrReference = append(responses.ResponseOrReference, default200Response)
 	}
 
 	// Add the default reponse if needed
