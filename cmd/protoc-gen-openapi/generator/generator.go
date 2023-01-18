@@ -518,7 +518,7 @@ func (g *OpenAPIv3Generator) buildOperationV3(
 		responses.ResponseOrReference = append(responses.ResponseOrReference, default200Response)
 	}
 
-	// Add the default reponse if needed
+	// Add the default response if needed
 	if *g.conf.DefaultResponse {
 		anySchemaName := g.reflect.formatMessageName(anyProtoDesc)
 		anySchema := wk.NewGoogleProtobufAnySchema(anySchemaName)
